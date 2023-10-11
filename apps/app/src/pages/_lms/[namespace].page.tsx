@@ -31,6 +31,8 @@ type Props = CommonProps & {
   isSearchServiceReachable: boolean,
   isSearchScopeChildrenAsDefault: boolean,
   showPageLimitationXL: number,
+
+  courceTitle: string,
 };
 
 const CourcePage: NextPageWithLayout<CommonProps> = (props: Props) => {
@@ -73,7 +75,24 @@ const CourcePage: NextPageWithLayout<CommonProps> = (props: Props) => {
         </header>
 
         <div className="content-main container-lg grw-container-convertible mb-5 pb-5">
-          <CourceUnitList path={props.currentPathname} />
+          <div className="d-flex align-items-end justify-content-between my-4">
+            <h1>{props.courceTitle}</h1>
+            <div>
+              <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                <label className="btn btn-outline-secondary active">
+                  <input type="radio" name="options" id="option1" checked />
+                  <span className="icon icon-graph"></span>
+                </label>
+                <label className="btn btn-outline-secondary">
+                  <input type="radio" name="options" id="option2" />
+                  <span className="icon icon-list"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div className="mt-3">
+            <CourceUnitList path={props.currentPathname} />
+          </div>
         </div>
 
       </div>
@@ -101,6 +120,25 @@ CourcePage.getLayout = function getLayout(page) {
     </>
   );
 };
+
+async function injectCourceData(context: GetServerSidePropsContext, props: Props): Promise<void> {
+  const { namespace } = context.query;
+
+  if (namespace == null) {
+    return;
+  }
+  if (Array.isArray(namespace)) {
+    throw new Error('The query "namespace" must not be an array.');
+  }
+
+  const { LmsCource } = await import('~/features/lms/server/models');
+
+  const cource = await LmsCource.findByNamespace(namespace);
+
+  if (cource != null) {
+    props.courceTitle = cource.title;
+  }
+}
 
 function injectServerConfigurations(context: GetServerSidePropsContext, props: Props): void {
   const req: CrowiRequest = context.req as CrowiRequest;
@@ -146,6 +184,7 @@ export const getServerSideProps: GetServerSideProps = async(context: GetServerSi
     props.currentUser = user.toObject();
   }
 
+  await injectCourceData(context, props);
   injectServerConfigurations(context, props);
   await injectNextI18NextConfigurations(context, props, ['translation']);
 
