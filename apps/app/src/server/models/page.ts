@@ -108,6 +108,8 @@ const schema = new Schema<PageDocument, PageModel>({
   updatedAt: { type: Date, default: Date.now }, // Do not use timetamps for updatedAt because it breaks 'updateMetadata: false' option
   deleteUser: { type: ObjectId, ref: 'User' },
   deletedAt: { type: Date },
+  // for CMS
+  cmsMetadata: { type: Map },
 }, {
   timestamps: { createdAt: true, updatedAt: false },
   toJSON: { getters: true },
