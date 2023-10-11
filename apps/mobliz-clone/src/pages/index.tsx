@@ -6,7 +6,7 @@ import axios from '~/utils/axios';
 
 const Top: NextPage = () => {
   const [body, setBody] = useState<string>();
-  axios.get('http://localhost:3000/_api/v3/page?pageId=6522505d8eddc4a6c69499b0').then(data => {
+  axios.get('http://localhost:3000/_api/v3/page?pageId=6522505d8eddc4a6c69499b0').then((data) => {
     setBody(data.data.page.revision.body);
   });
 
