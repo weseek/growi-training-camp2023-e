@@ -49,7 +49,7 @@ module.exports = function(crowi) {
     }
 
     const pagesWithHTMLString = pages.map((page) => {
-      return { page, htmlString: md({ html: true }).use(emoji).render(page.revision.body) };
+      return { page, htmlString: md({ html: true, linkify: true }).use(emoji).render(page.revision.body) };
     });
 
     return res.json(ApiResponse.success(pagesWithHTMLString));
@@ -89,7 +89,7 @@ module.exports = function(crowi) {
       }
     }
 
-    const htmlString = md({ html: true }).use(emoji).render(page.revision.body);
+    const htmlString = md({ html: true, linkify: true }).use(emoji).render(page.revision.body);
 
     return res.json(ApiResponse.success({ page, htmlString }));
   };
