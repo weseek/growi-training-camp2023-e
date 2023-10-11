@@ -24,7 +24,6 @@ type SubstanceProps = {
   onPagesDeleted?: OnDeletedFunction,
 }
 
-
 const ArticleListSubstance = (props: SubstanceProps): JSX.Element => {
 
   const { t } = useTranslation();
@@ -61,19 +60,20 @@ const ArticleListSubstance = (props: SubstanceProps): JSX.Element => {
 
   const showPager = pagingResult.totalCount > pagingResult.limit;
 
+  const rowList = pagingResult.items.map(page => (
+    <tr><td>{page.path}</td></tr>
+  ));
+
   return (
     <>
       <table className="table table-bordered">
         <thead>
           <tr>
-            <th>foo</th>
+            <th>Article name</th>
           </tr>
         </thead>
         <tbody className="overflow-auto">
-          <tr>
-            <td className="text-center">bar
-            </td>
-          </tr>
+          {rowList}
         </tbody>
       </table>
 
