@@ -12,8 +12,9 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 export interface ILmsCourceDocument extends ILmsCource, Document {
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+
 export interface ILmsCourceModel extends Model<ILmsCourceDocument> {
+  findByNamespace(namespace: string): Promise<ILmsCourceDocument>
 }
 
 const lmsCourceSchema = new Schema<ILmsCourceDocument, ILmsCource>({
@@ -23,5 +24,9 @@ const lmsCourceSchema = new Schema<ILmsCourceDocument, ILmsCource>({
   attendedUsers: [{ type: ObjectId, ref: 'User' }],
   attendedUserGroups: [{ type: ObjectId, ref: 'UserGroup' }],
 });
+
+lmsCourceSchema.statics.findByNamespace = async function(namespace: string): Promise<ILmsCourceDocument> {
+  return this.findOne({ namespace }).lean();
+};
 
 export const LmsCource = getOrCreateModel<ILmsCourceDocument, ILmsCourceModel>('LmsCource', lmsCourceSchema);
