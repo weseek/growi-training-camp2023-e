@@ -17,7 +17,8 @@ export interface ILmsCourceModel extends Model<ILmsCourceDocument> {
 }
 
 const lmsCourceSchema = new Schema<ILmsCourceDocument, ILmsCource>({
-  name: { type: String, required: true },
+  namespace: { type: String, required: true, unique: true },
+  title: { type: String, required: true },
   desc: { type: String },
   attendedUsers: [{ type: ObjectId, ref: 'User' }],
   attendedUserGroups: [{ type: ObjectId, ref: 'UserGroup' }],

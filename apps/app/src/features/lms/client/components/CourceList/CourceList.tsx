@@ -14,18 +14,24 @@ export const CourceList = (): JSX.Element => {
     <table className="table table-bordered grw-duplicated-paths-table">
       <thead>
         <tr>
-          <th className="col-4">namespace</th>
+          <th className="col-1">namespace</th>
+          <th className="col-4">Title</th>
           <th>desc</th>
         </tr>
       </thead>
       <tbody className="overflow-auto">
         {data.map((cmsNamespace) => {
-          const { _id, name, desc } = cmsNamespace;
+          const { namespace, title, desc } = cmsNamespace;
           return (
-            <tr key={_id.toString()}>
+            <tr key={namespace}>
               <td>
-                <Link href={`/_lms/${_id.toString()}`} prefetch={false}>
-                  {name}
+                <Link href={`/_lms/${namespace}`} prefetch={false}>
+                  {namespace}
+                </Link>
+              </td>
+              <td>
+                <Link href={`/_lms/${namespace}`} prefetch={false}>
+                  {title}
                 </Link>
               </td>
               <td>
@@ -35,7 +41,7 @@ export const CourceList = (): JSX.Element => {
           );
         })}
         <tr>
-          <td colSpan={2} className="text-center">
+          <td colSpan={3} className="text-center">
             <button type="button" className="btn btn-outline-secondary">
               <span className="icon icon-plus" /> Add
             </button>

@@ -1,7 +1,8 @@
 import type { HasObjectId, IUser, IUserGroup } from '@growi/core';
 
 export type ILmsCource = {
-  name: string,
+  namespace: string,
+  title: string,
   desc?: string,
   attendedUsers: IUser[],
   attendedUserGroups: IUserGroup[],
