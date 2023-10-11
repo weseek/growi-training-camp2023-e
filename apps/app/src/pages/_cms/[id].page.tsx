@@ -1,31 +1,28 @@
-import React, { useState, useCallback, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
 import type { IUser, IUserHasId } from '@growi/core';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 
+import { GrowiSubNavigation } from '~/components/Navbar/GrowiSubNavigation';
+import NotFoundPage from '~/components/NotFoundPage';
 import type { CrowiRequest } from '~/interfaces/crowi-request';
 import type { RendererConfig } from '~/interfaces/services/renderer';
-import type { IDataTagCount } from '~/interfaces/tag';
-import { useSWRxTagsList } from '~/stores/tag';
+import { useDrawerMode } from '~/stores/ui';
 
 import { BasicLayout } from '../../components/Layout/BasicLayout';
 import {
   useCurrentUser, useIsSearchPage,
   useIsSearchServiceConfigured, useIsSearchServiceReachable,
-  useIsSearchScopeChildrenAsDefault, useGrowiCloudUri,
+  useIsSearchScopeChildrenAsDefault,
 } from '../../stores/context';
 import { NextPageWithLayout } from '../_app.page';
 import type { CommonProps } from '../utils/commons';
 import {
   getServerSideCommonProps, getNextI18NextConfig, generateCustomTitle, useInitSidebarConfig,
 } from '../utils/commons';
-
-const PAGING_LIMIT = 10;
 
 type Props = CommonProps & {
   currentUser: IUser,
@@ -36,29 +33,10 @@ type Props = CommonProps & {
   rendererConfig: RendererConfig,
 };
 
-const TagList = dynamic(() => import('~/components/TagList'), { ssr: false });
-const TagCloudBox = dynamic(() => import('~/components/TagCloudBox'), { ssr: false });
 
-const TagPage: NextPageWithLayout<CommonProps> = (props: Props) => {
-  const router = useRouter();
-  const { id } = router.query;
-
-  const [activePage, setActivePage] = useState<number>(1);
-  const [offset, setOffset] = useState<number>(0);
-
+const Page: NextPageWithLayout<CommonProps> = (props: Props) => {
   useCurrentUser(props.currentUser ?? null);
-  const { data: tagDataList, error } = useSWRxTagsList(PAGING_LIMIT, offset);
   const { t } = useTranslation('');
-  const setOffsetByPageNumber = useCallback((selectedPageNumber: number) => {
-    setActivePage(selectedPageNumber);
-    setOffset((selectedPageNumber - 1) * PAGING_LIMIT);
-  }, []);
-
-  const tagData: IDataTagCount[] = tagDataList?.data || [];
-  const totalCount: number = tagDataList?.totalCount || 0;
-  const isLoading = tagDataList === undefined && error == null;
-
-  useGrowiCloudUri(props.growiCloudUri);
 
   useIsSearchPage(false);
   useIsSearchServiceConfigured(props.isSearchServiceConfigured);
@@ -68,6 +46,8 @@ const TagPage: NextPageWithLayout<CommonProps> = (props: Props) => {
   // init sidebar config with UserUISettings and sidebarConfig
   useInitSidebarConfig(props.sidebarConfig, props.userUISettings);
 
+  const { data: isDrawerMode } = useDrawerMode();
+
   const title = generateCustomTitle(props, t('Tags'));
 
   return (
@@ -76,30 +56,18 @@ const TagPage: NextPageWithLayout<CommonProps> = (props: Props) => {
         <title>{title}</title>
       </Head>
       <div className="dynamic-layout-root">
+        <header className="py-0 position-relative">
+          <GrowiSubNavigation
+            pagePath={props.currentPathname}
+            showDrawerToggler={isDrawerMode}
+            isTagLabelsDisabled
+            isDrawerMode={isDrawerMode}
+            additionalClasses={['container-fluid']}
+          />
+        </header>
+
         <div className="grw-container-convertible container-lg mb-5 pb-5" data-testid="tags-page">
-          <h2 className="my-3">{`${t('Tags')}(${totalCount})`}</h2>
-          <div className="px-3 mb-5 text-center">
-            <TagCloudBox tags={tagData} minSize={20} />
-          </div>
-          { isLoading
-            ? (
-              <div className="text-muted text-center">
-                <i className="fa fa-2x fa-spinner fa-pulse mt-3"></i>
-              </div>
-            )
-            : (
-              <div data-testid="grw-tags-list">
-                <TagList
-                  tagData={tagData}
-                  totalTags={totalCount}
-                  activePage={activePage}
-                  onChangePage={setOffsetByPageNumber}
-                  pagingLimit={PAGING_LIMIT}
-                />
-              </div>
-            )
-          }
-          <div id="grw-fav-sticky-trigger" className="sticky-top"></div>
+          <NotFoundPage path={props.currentPathname} />
         </div>
       </div>
     </>
@@ -117,7 +85,7 @@ const Layout = ({ children, ...props }: LayoutProps): JSX.Element => {
   return <BasicLayout>{children}</BasicLayout>;
 };
 
-TagPage.getLayout = function getLayout(page) {
+Page.getLayout = function getLayout(page) {
   return (
     <Layout {...page.props}>
       {page}
@@ -176,4 +144,4 @@ export const getServerSideProps: GetServerSideProps = async(context: GetServerSi
   };
 };
 
-export default TagPage;
+export default Page;
