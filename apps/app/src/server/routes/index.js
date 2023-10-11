@@ -49,7 +49,6 @@ module.exports = function(crowi, app) {
   const search = require('./search')(crowi, app);
   const hackmd = require('./hackmd')(crowi, app);
   const ogp = require('./ogp')(crowi);
-  const cms = require('./cms')(crowi, app);
 
   const next = nextFactory(crowi);
 
@@ -187,7 +186,6 @@ module.exports = function(crowi, app) {
 
   app.use('/ogp', express.Router().get('/:pageId([0-9a-z]{0,})', loginRequired, ogp.pageIdRequired, ogp.ogpValidator, ogp.renderOgp));
 
-  app.get('/_cms/:pageId.json', cms.api.get);
   app.get('/_cms/tags', tag.api.list);
 
   app.get('/*/$'                   , loginRequired, next.delegateToNext);
