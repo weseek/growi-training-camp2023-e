@@ -6,8 +6,8 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 
-import { DescendantsPageList } from '~/components/DescendantsPageList';
 import { GrowiSubNavigation } from '~/components/Navbar/GrowiSubNavigation';
+import { ArticleList } from '~/features/cms/client/components/ArticleList';
 import type { CrowiRequest } from '~/interfaces/crowi-request';
 import type { RendererConfig } from '~/interfaces/services/renderer';
 import { useDrawerMode } from '~/stores/ui';
@@ -67,7 +67,7 @@ const Page: NextPageWithLayout<CommonProps> = (props: Props) => {
         </header>
 
         <div className="grw-container-convertible container-lg mb-5 pb-5" data-testid="tags-page">
-          <DescendantsPageList path={props.currentPathname} />
+          <ArticleList path={props.currentPathname} />
         </div>
       </div>
     </>
