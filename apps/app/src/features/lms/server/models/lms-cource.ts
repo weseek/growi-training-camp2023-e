@@ -17,7 +17,7 @@ export interface ILmsCourceModel extends Model<ILmsCourceDocument> {
   findByNamespace(namespace: string): Promise<ILmsCourceDocument>
 }
 
-const lmsCourceSchema = new Schema<ILmsCourceDocument, ILmsCource>({
+const lmsCourceSchema = new Schema<ILmsCourceDocument, ILmsCourceModel>({
   namespace: { type: String, required: true, unique: true },
   title: { type: String, required: true },
   desc: { type: String },
