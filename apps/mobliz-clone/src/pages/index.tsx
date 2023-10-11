@@ -10,7 +10,7 @@ const TopPage: NextPage = () => {
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    axios.get('http://localhost:3000/_cms/list.json')
+    axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/list.json`)
       .then((response) => {
         setData(response.data);
       })
