@@ -16,6 +16,8 @@ import {
   useSWRxPageList,
 } from '~/stores/page-listing';
 
+import { ArticleListHead, ArticleListRow } from './ArticleListRow';
+
 
 type SubstanceProps = {
   pagingResult: IPagingResult<IPageHasId> | undefined,
@@ -61,16 +63,14 @@ const ArticleListSubstance = (props: SubstanceProps): JSX.Element => {
   const showPager = pagingResult.totalCount > pagingResult.limit;
 
   const rowList = pagingResult.items.map(page => (
-    <tr><td>{page.path}</td></tr>
+    <ArticleListRow page={page} />
   ));
 
   return (
     <>
       <table className="table table-bordered">
         <thead>
-          <tr>
-            <th>Article name</th>
-          </tr>
+          <ArticleListHead />
         </thead>
         <tbody className="overflow-auto">
           {rowList}
