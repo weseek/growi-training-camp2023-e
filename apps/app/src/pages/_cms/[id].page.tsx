@@ -6,8 +6,8 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 
+import { DescendantsPageList } from '~/components/DescendantsPageList';
 import { GrowiSubNavigation } from '~/components/Navbar/GrowiSubNavigation';
-import NotFoundPage from '~/components/NotFoundPage';
 import type { CrowiRequest } from '~/interfaces/crowi-request';
 import type { RendererConfig } from '~/interfaces/services/renderer';
 import { useDrawerMode } from '~/stores/ui';
@@ -21,7 +21,7 @@ import {
 import { NextPageWithLayout } from '../_app.page';
 import type { CommonProps } from '../utils/commons';
 import {
-  getServerSideCommonProps, getNextI18NextConfig, generateCustomTitle, useInitSidebarConfig,
+  getServerSideCommonProps, getNextI18NextConfig, useInitSidebarConfig, generateCustomTitleForPage,
 } from '../utils/commons';
 
 type Props = CommonProps & {
@@ -48,7 +48,7 @@ const Page: NextPageWithLayout<CommonProps> = (props: Props) => {
 
   const { data: isDrawerMode } = useDrawerMode();
 
-  const title = generateCustomTitle(props, t('Tags'));
+  const title = generateCustomTitleForPage(props, props.currentPathname);
 
   return (
     <>
@@ -67,7 +67,7 @@ const Page: NextPageWithLayout<CommonProps> = (props: Props) => {
         </header>
 
         <div className="grw-container-convertible container-lg mb-5 pb-5" data-testid="tags-page">
-          <NotFoundPage path={props.currentPathname} />
+          <DescendantsPageList path={props.currentPathname} />
         </div>
       </div>
     </>
