@@ -14,6 +14,7 @@ import escapeStringRegexp from 'escape-string-regexp';
 import mongoose, { ObjectId, Cursor } from 'mongoose';
 import streamToPromise from 'stream-to-promise';
 
+import { extract as extractCmsMetadata } from '~/features/cms/server/utils';
 import { SupportedAction } from '~/interfaces/activity';
 import { V5ConversionErrCode } from '~/interfaces/errors/v5-conversion-error';
 import {
@@ -3707,6 +3708,12 @@ class PageService {
     // Update descendantCount
     await this.updateDescendantCountOfAncestors(page._id, 1, false);
 
+    // Update cmsMetadata
+    const cmsMetadata = extractCmsMetadata(page.revision.body);
+    if (cmsMetadata != null) {
+      page.updateCmsMetadata(cmsMetadata);
+    }
+
     // Delete PageRedirect if exists
     try {
       await PageRedirect.deleteOne({ fromPath: page.path });
@@ -3925,6 +3932,12 @@ class PageService {
     // 3. Update scopes for descendants
     if (options.overwriteScopesOfDescendants) {
       await Page.applyScopesToDescendantsAsyncronously(currentPage, user);
+    }
+
+    // 4. Update cmsMetadata
+    const cmsMetadata = extractCmsMetadata(currentPage.revision.body);
+    if (cmsMetadata != null) {
+      await currentPage.updateCmsMetadata(cmsMetadata);
     }
 
     await PageOperation.findByIdAndDelete(pageOpId);
