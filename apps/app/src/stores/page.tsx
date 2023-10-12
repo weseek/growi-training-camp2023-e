@@ -179,11 +179,11 @@ export const useSWRMUTxPageInfo = (
   );
 };
 
-export const useSWRxPageRevision = (pageId: string, revisionId: Ref<IRevision>): SWRResponse<IRevisionHasId> => {
-  const key = [`/revisions/${revisionId}`, pageId, revisionId];
+export const useSWRxPageRevision = (pageId: string | undefined, revisionId: Ref<IRevision> | undefined): SWRResponse<IRevisionHasId> => {
+  const key = (pageId == null || revisionId == null) ? null : [`/revisions/${revisionId.toString()}`, pageId];
   return useSWRImmutable(
     key,
-    () => apiv3Get<{ revision: IRevisionHasId }>(`/revisions/${revisionId}`, { pageId }).then(response => response.data.revision),
+    ([endpoint, pageId]) => apiv3Get<{ revision: IRevisionHasId }>(endpoint, { pageId }).then(response => response.data.revision),
   );
 };
 
