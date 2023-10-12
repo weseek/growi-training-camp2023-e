@@ -481,7 +481,7 @@ export class PageQueryBuilder {
           },
           {
             path: 'creator',
-            select: 'name',
+            select: userPublicFields,
           },
         ],
 
