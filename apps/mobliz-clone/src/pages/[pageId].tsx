@@ -43,8 +43,8 @@ const DetailPage: NextPage<Props> = (props: Props) => {
             </div>
           ) : (
             <>
-              <p>{dateFnsFormat(new Date(dataTest?.page.createdAt), 'yyyy-MM-dd')}</p>
-              <p>{dateFnsFormat(new Date(dataTest?.page.updatedAt), 'yyyy-MM-dd')}</p>
+              <p>{dateFnsFormat(new Date(dataTest?.page.createdAt), 'yyyy.MM.dd')}</p>
+              <p>{dateFnsFormat(new Date(dataTest?.page.updatedAt), 'yyyy.MM.dd')}</p>
               <p>{dataTest?.page.creator.name}</p>
               {parse(htmlString)}
             </>
