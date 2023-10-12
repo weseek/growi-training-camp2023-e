@@ -48,7 +48,20 @@ module.exports = function(crowi) {
       pages.pop();
     }
 
-    const pagesWithHTMLString = pages.map((page) => {
+    // TODO: filter と sort の処理を mongoDB のクエリ実行時に行う
+    // cmsMetadata に publishedAt が存在し、かつその日時が現在時刻以前のものを絞り込む
+    const filteredPages = pages.filter((page) => {
+      const publishedAt = page?.cmsMetadata?.get('publishedAt');
+      return publishedAt != null && new Date() > new Date(publishedAt);
+    });
+
+    const pagesSortedByPublishedAt = filteredPages.sort((a, b) => {
+      const timeA = new Date(a.cmsMetadata.get('publishedAt')).getTime();
+      const timeB = new Date(b.cmsMetadata.get('publishedAt')).getTime();
+      return timeB - timeA;
+    });
+
+    const pagesWithHTMLString = pagesSortedByPublishedAt.map((page) => {
       return { page, htmlString: md({ html: true, linkify: true }).use(emoji).render(page.revision.body) };
     });
 
