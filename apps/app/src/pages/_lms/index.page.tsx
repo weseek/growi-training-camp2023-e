@@ -72,7 +72,12 @@ const LmsPage: NextPageWithLayout<CommonProps> = (props: Props) => {
         </header>
 
         <div className="content-main container-lg grw-container-convertible mb-5 pb-5">
-          <CourceList />
+          <div className="mt-4">
+            <h1>All Cources</h1>
+          </div>
+          <div className="mt-3">
+            <CourceList />
+          </div>
         </div>
 
         <div id="grw-fav-sticky-trigger" className="sticky-top"></div>
