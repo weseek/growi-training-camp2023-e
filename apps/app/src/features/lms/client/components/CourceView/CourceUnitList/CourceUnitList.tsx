@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import type {
   IPageHasId,
@@ -6,6 +6,7 @@ import type {
 
 import { IPagingResult } from '~/interfaces/paging-result';
 import { useIsSharedUser } from '~/stores/context';
+import { usePagePresentationModal } from '~/stores/modal';
 import {
   useSWRxPageList,
 } from '~/stores/page-listing';
@@ -20,6 +21,15 @@ type SubstanceProps = {
 const CourceUnitListSubstance = (props: SubstanceProps): JSX.Element => {
 
   const { pagingResult } = props;
+
+  const { open: openPresentationModal } = usePagePresentationModal();
+
+  const playHandler = useCallback((page: IPageHasId) => {
+    openPresentationModal({
+      pageId: page._id,
+      revisionId: page.revision.toString(),
+    });
+  }, [openPresentationModal]);
 
   // const pageDeletedHandler: OnDeletedFunction = useCallback((...args) => {
   //   const path = args[0];
@@ -48,7 +58,7 @@ const CourceUnitListSubstance = (props: SubstanceProps): JSX.Element => {
   }
 
   const rowList = pagingResult.items.map(page => (
-    <CourceUnitRow page={page} />
+    <CourceUnitRow page={page} onPlayButtonClicked={playHandler} />
   ));
 
   return (

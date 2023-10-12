@@ -18,10 +18,11 @@ export const CourceUnitHead = (): JSX.Element => {
 
 type Props = {
   page: IPageHasId,
+  onPlayButtonClicked?: (page: IPageHasId) => void,
 }
 
 export const CourceUnitRow = (props: Props): JSX.Element => {
-  const { page } = props;
+  const { page, onPlayButtonClicked } = props;
 
   const dPagePath: DevidedPagePath = new DevidedPagePath(page.path, false);
   const linkedPagePath = new LinkedPagePath(dPagePath.latter);
@@ -29,7 +30,7 @@ export const CourceUnitRow = (props: Props): JSX.Element => {
   return (
     <tr>
       <td>
-        <button type="button" className="btn btn-lg btn-light d-flex align-items-center">
+        <button type="button" className="btn btn-lg btn-light d-flex align-items-center" onClick={() => onPlayButtonClicked?.(page)}>
           <span className="material-icons">play_arrow</span>
         </button>
       </td>
