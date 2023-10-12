@@ -14,13 +14,14 @@ const DetailPage: NextPage<Props> = (props: Props) => {
   const router = useRouter();
   const pageId = router.query.pageId ?? props.pageId;
   const [htmlString, setHTMLString] = useState();
+  const [title, setTitle] = useState();
   const [error, setError] = useState<string>();
 
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/${pageId}.json`)
       .then((response) => {
-        console.log(response);
         setHTMLString(response.data.htmlString);
+        setTitle(response.data.title);
       })
       .catch((error) => {
         setError(`データの取得に失敗しました。\n${JSON.stringify(error)}`);
@@ -36,7 +37,10 @@ const DetailPage: NextPage<Props> = (props: Props) => {
               <span className="visually-hidden">Loading...</span>
             </div>
           ) : (
-            <>{parse(htmlString)}</>
+            <>
+              <h2 className="pb-5 fw-bold">{title}</h2>
+              {parse(htmlString)}
+            </>
           )}
         </>
       ) : (
