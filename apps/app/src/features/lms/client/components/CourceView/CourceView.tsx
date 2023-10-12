@@ -23,24 +23,22 @@ export const CourceView = (): JSX.Element => {
   }
 
   const Toggler = () => (
-    <div className="btn-group btn-group-toggle" data-toggle="buttons">
-      <label className={`btn btn-outline-secondary ${isDashboardMode ? 'active' : ''}`} onClick={() => setDashboardMode(true)}>
-        <input type="radio" name="options" id="option1" checked={isDashboardMode} onChange={() => setDashboardMode(true)} />
-        <span className="icon icon-graph"></span>
-      </label>
-      <label className={`btn btn-outline-secondary ${isDashboardMode ? '' : 'active'}`} onClick={() => setDashboardMode(false)}>
-        <input type="radio" name="options" id="option2" checked={!isDashboardMode} onChange={() => setDashboardMode(true)} />
-        <span className="icon icon-list"></span>
-      </label>
+    <div className="list-group sticky-top d-none d-lg-block">
+      <button type="button" className={`list-group-item list-group-item-action ${isDashboardMode ? 'active' : ''}`} onClick={() => setDashboardMode(true)}>
+        <span className="icon icon-grid mr-1"></span>Dashboard
+      </button>
+      <button type="button" className={`list-group-item list-group-item-action ${isDashboardMode ? '' : 'active'}`} onClick={() => setDashboardMode(false)}>
+        <span className="icon icon-list mr-1"></span>List
+      </button>
     </div>
   );
 
   return (
-    <>
-      <div className="d-flex flex-column align-items-end">
+    <div className="row">
+      <div className="col-lg-3">
         <Toggler />
       </div>
-      <div className="mt-3">
+      <div className="col-lg-9">
         <TabContent activeTab={isDashboardMode ? 'dashboard' : 'list'}>
           <TabPane tabId="dashboard">
             <CourceDashboard />
@@ -50,6 +48,6 @@ export const CourceView = (): JSX.Element => {
           </TabPane>
         </TabContent>
       </div>
-    </>
+    </div>
   );
 };
