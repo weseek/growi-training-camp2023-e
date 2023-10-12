@@ -33,6 +33,8 @@ export type IPage = {
   latestRevision?: Ref<IRevision>,
   latestRevisionBodyLength?: number,
   expandContentWidth?: boolean,
+  // for CMS
+  cmsMetadata?: Record<string, any>;
 }
 
 export type IPagePopulatedToList = Omit<IPageHasId, 'lastUpdateUser'> & {

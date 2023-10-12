@@ -38,6 +38,7 @@ export interface PageDocument extends IPage, Document {
   [x:string]: any // for obsolete methods
   getLatestRevisionBodyLength(): Promise<number | null | undefined>
   calculateAndUpdateLatestRevisionBodyLength(this: PageDocument): Promise<void>
+  updateCmsMetadata(cmsMetadata: Record<string, any>): Promise<void>
 }
 
 
@@ -108,6 +109,8 @@ const schema = new Schema<PageDocument, PageModel>({
   updatedAt: { type: Date, default: Date.now }, // Do not use timetamps for updatedAt because it breaks 'updateMetadata: false' option
   deleteUser: { type: ObjectId, ref: 'User' },
   deletedAt: { type: Date },
+  // for CMS
+  cmsMetadata: { type: Map },
 }, {
   timestamps: { createdAt: true, updatedAt: false },
   toJSON: { getters: true },
@@ -1011,6 +1014,10 @@ schema.methods.calculateAndUpdateLatestRevisionBodyLength = async function(this:
 
   this.latestRevisionBodyLength = populatedPageDocument.revision.body.length;
   await this.save();
+};
+
+schema.methods.updateCmsMetadata = async function(this: PageDocument, cmsMetadata: Record<string, any>): Promise<void> {
+  await this.updateOne({ $set: { cmsMetadata } });
 };
 
 export type PageCreateOptions = {
