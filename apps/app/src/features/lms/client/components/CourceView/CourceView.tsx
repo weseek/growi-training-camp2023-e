@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { TabContent, TabPane } from 'reactstrap';
+
 import { useCurrentPathname } from '~/stores/context';
 
 import { CourceUnitList } from '../CourceUnitList';
@@ -33,7 +35,14 @@ export const CourceView = (): JSX.Element => {
         <Toggler />
       </div>
       <div className="mt-3">
-        <CourceUnitList path={currentPagePath} />
+        <TabContent activeTab={isDashboardMode ? 'dashboard' : 'list'}>
+          <TabPane tabId="dashboard">
+            Dashboard
+          </TabPane>
+          <TabPane tabId="list">
+            <CourceUnitList path={currentPagePath} />
+          </TabPane>
+        </TabContent>
       </div>
     </>
   );
