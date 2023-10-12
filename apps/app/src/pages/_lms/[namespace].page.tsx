@@ -8,6 +8,7 @@ import Head from 'next/head';
 
 import { GrowiSubNavigation } from '~/components/Navbar/GrowiSubNavigation';
 import type { CrowiRequest } from '~/interfaces/crowi-request';
+import type { RendererConfig } from '~/interfaces/services/renderer';
 import { useCurrentPageId } from '~/stores/page';
 import { useDrawerMode } from '~/stores/ui';
 
@@ -15,7 +16,7 @@ import { BasicLayout } from '../../components/Layout/BasicLayout';
 import {
   useCurrentUser, useCurrentPathname, useGrowiCloudUri,
   useIsSearchServiceConfigured, useIsSearchServiceReachable,
-  useIsSearchScopeChildrenAsDefault, useIsSearchPage, useShowPageLimitationXL,
+  useIsSearchScopeChildrenAsDefault, useIsSearchPage, useShowPageLimitationXL, useRendererConfig,
 } from '../../stores/context';
 import type { NextPageWithLayout } from '../_app.page';
 import type { CommonProps } from '../utils/commons';
@@ -33,6 +34,8 @@ type Props = CommonProps & {
   showPageLimitationXL: number,
 
   courceTitle: string,
+
+  rendererConfig: RendererConfig,
 };
 
 const CourcePage: NextPageWithLayout<CommonProps> = (props: Props) => {
@@ -50,6 +53,8 @@ const CourcePage: NextPageWithLayout<CommonProps> = (props: Props) => {
 
   // init sidebar config with UserUISettings and sidebarConfig
   useInitSidebarConfig(props.sidebarConfig, props.userUISettings);
+
+  useRendererConfig(props.rendererConfig);
 
   useShowPageLimitationXL(props.showPageLimitationXL);
 
@@ -143,6 +148,23 @@ function injectServerConfigurations(context: GetServerSidePropsContext, props: P
     isSidebarClosedAtDockMode: configManager.getConfig('crowi', 'customize:isSidebarClosedAtDockMode'),
   };
 
+  props.rendererConfig = {
+    isEnabledLinebreaks: configManager.getConfig('markdown', 'markdown:isEnabledLinebreaks'),
+    isEnabledLinebreaksInComments: configManager.getConfig('markdown', 'markdown:isEnabledLinebreaksInComments'),
+    isEnabledMarp: configManager.getConfig('crowi', 'customize:isEnabledMarp'),
+    adminPreferredIndentSize: configManager.getConfig('markdown', 'markdown:adminPreferredIndentSize'),
+    isIndentSizeForced: configManager.getConfig('markdown', 'markdown:isIndentSizeForced'),
+
+    drawioUri: configManager.getConfig('crowi', 'app:drawioUri'),
+    plantumlUri: configManager.getConfig('crowi', 'app:plantumlUri'),
+
+    // XSS Options
+    isEnabledXssPrevention: configManager.getConfig('markdown', 'markdown:rehypeSanitize:isEnabledPrevention'),
+    xssOption: configManager.getConfig('markdown', 'markdown:rehypeSanitize:option'),
+    attrWhitelist: JSON.parse(crowi.configManager.getConfig('markdown', 'markdown:rehypeSanitize:attributes')),
+    tagWhitelist: crowi.configManager.getConfig('markdown', 'markdown:rehypeSanitize:tagNames'),
+    highlightJsStyleBorder: crowi.configManager.getConfig('crowi', 'customize:highlightJsStyleBorder'),
+  };
 }
 
 /**
