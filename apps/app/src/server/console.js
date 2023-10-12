@@ -6,7 +6,11 @@ const mongoose = require('mongoose');
 
 const { getMongoUri, mongoOptions } = require('~/server/util/mongoose-utils');
 
-const models = require('./models');
+const models = {
+  ...require('./models'),
+  ...require('~/features/cms/server/models'),
+  ...require('~/features/lms/server/models'),
+};
 
 Object.keys(models).forEach((modelName) => {
   global[modelName] = models[modelName];

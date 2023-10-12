@@ -202,6 +202,9 @@ export const generateSimpleViewOptions = (
       attachment.sanitizeOption,
       lsxGrowiDirective.sanitizeOption,
       refsGrowiDirective.sanitizeOption,
+      {
+        tagNames: ['cource-end'],
+      },
     )]
     : () => {};
 
