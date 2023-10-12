@@ -16,6 +16,7 @@ const DetailPage: NextPage<Props> = (props: Props) => {
   const pageId = router.query.pageId ?? props.pageId;
   const [error, setError] = useState<string>();
   const [htmlString, setHTMLString] = useState();
+  const [page, setPage] = useState<any>();
 
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/${pageId}.json`)
@@ -27,7 +28,6 @@ const DetailPage: NextPage<Props> = (props: Props) => {
         setError(`データの取得に失敗しました。\n${JSON.stringify(error)}`);
       });
   }, [pageId]);
-  console.log('pagdata', pageData);
 
   return (
     <div className="border bg-white p-5">
@@ -40,14 +40,14 @@ const DetailPage: NextPage<Props> = (props: Props) => {
           ) : (
             <>
               <div className="list-inline d-flex mb-4">
-                <p className="me-4"> {dateFnsFormat(new Date(pageData.page.createdAt), 'yyyy.MM.dd')}</p>
-                <div> {dateFnsFormat(new Date(pageData.page.updatedAt), 'yyyy.MM.dd')}</div>
+                <p className="me-4"> {dateFnsFormat(new Date(page.createdAt), 'yyyy.MM.dd')}</p>
+                <div> {dateFnsFormat(new Date(page.updatedAt), 'yyyy.MM.dd')}</div>
               </div>
-              <h2 className="pb-5 fw-bold">{pageData.title}</h2>
-              {parse(pageData.htmlString)}
+              <h2 className="pb-5 fw-bold">{page.title}</h2>
+              {parse(htmlString)}
               <hr />
-              <img src={pageData.page.creator.imageUrlCached} width="100" height="100" alt="" />
-              <p><strong>{pageData.page.creator.name}</strong></p>
+              <img src={page.creator.imageUrlCached} width="100" height="100" alt="" />
+              <p><strong>{page.creator.name}</strong></p>
             </>
           )}
         </>
