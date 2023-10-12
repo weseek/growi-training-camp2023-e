@@ -33,11 +33,11 @@ export const CourceUnitRow = (props: Props): JSX.Element => {
           <span className="material-icons">play_arrow</span>
         </button>
       </td>
-      <td>
+      <td className="align-middle">
         <PagePathHierarchicalLink linkedPagePath={linkedPagePath} basePath={dPagePath.isRoot ? undefined : dPagePath.former} />
       </td>
-      <td>author</td>
-      <td>(TBD)</td>
+      <td className="align-middle">author</td>
+      <td className="align-middle">(TBD)</td>
     </tr>
   );
 };
