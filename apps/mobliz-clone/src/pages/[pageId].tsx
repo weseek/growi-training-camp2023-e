@@ -13,15 +13,13 @@ type Props = {
 const DetailPage: NextPage<Props> = (props: Props) => {
   const router = useRouter();
   const pageId = router.query.pageId ?? props.pageId;
-  const [htmlString, setHTMLString] = useState();
-  const [title, setTitle] = useState();
+  const [pageData, setPageData] = useState<any>();
   const [error, setError] = useState<string>();
 
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/${pageId}.json`)
       .then((response) => {
-        setHTMLString(response.data.htmlString);
-        setTitle(response.data.title);
+        setPageData(response.data);
       })
       .catch((error) => {
         setError(`データの取得に失敗しました。\n${JSON.stringify(error)}`);
@@ -32,14 +30,14 @@ const DetailPage: NextPage<Props> = (props: Props) => {
     <div className="border bg-white p-5">
       {error == null ? (
         <>
-          {htmlString == null ? (
+          {pageData == null ? (
             <div className="spinner-border" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
           ) : (
             <>
-              <h2 className="pb-5 fw-bold">{title}</h2>
-              {parse(htmlString)}
+              <h2 className="pb-5 fw-bold">{pageData.title}</h2>
+              {parse(pageData.htmlString)}
             </>
           )}
         </>
