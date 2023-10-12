@@ -16,22 +16,18 @@ const DetailPage: NextPage<Props> = (props: Props) => {
   const pageId = router.query.pageId ?? props.pageId;
   const [htmlString, setHTMLString] = useState();
   const [error, setError] = useState<string>();
-
-  // 試し
-  const [dataTest, setDataTest] = useState<any>();
+  const [page, setPage] = useState<any>();
 
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/${pageId}.json`)
       .then((response) => {
         setHTMLString(response.data.htmlString);
-        setDataTest(response.data);
+        setPage(response.data.page);
       })
       .catch((error) => {
         setError(`データの取得に失敗しました。\n${JSON.stringify(error)}`);
       });
   }, [pageId]);
-  console.log('respo', dataTest);
-
 
   return (
     <div className="border bg-white p-5">
@@ -44,14 +40,14 @@ const DetailPage: NextPage<Props> = (props: Props) => {
           ) : (
             <>
               <div className="list-inline d-flex mb-4">
-                <p className="me-4"> {dateFnsFormat(new Date(dataTest?.page.createdAt), 'yyyy.MM.dd')}</p>
-                <div> {dateFnsFormat(new Date(dataTest?.page.updatedAt), 'yyyy.MM.dd')}</div>
+                <p className="me-4"> {dateFnsFormat(new Date(page.createdAt), 'yyyy.MM.dd')}</p>
+                <div> {dateFnsFormat(new Date(page.updatedAt), 'yyyy.MM.dd')}</div>
               </div>
 
               {parse(htmlString)}
               <hr />
-              <img src={dataTest?.page.creator.imageUrlCached} width="100" height="100" alt="" />
-              <p><strong>{dataTest?.page.creator.name}</strong></p>
+              <img src={page.creator.imageUrlCached} width="100" height="100" alt="" />
+              <p><strong>{page.creator.name}</strong></p>
             </>
           )}
         </>
