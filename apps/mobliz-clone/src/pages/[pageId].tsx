@@ -14,14 +14,14 @@ type Props = {
 const DetailPage: NextPage<Props> = (props: Props) => {
   const router = useRouter();
   const pageId = router.query.pageId ?? props.pageId;
-  const [htmlString, setHTMLString] = useState();
+  const [pageData, setPageData] = useState<any>();
   const [error, setError] = useState<string>();
   const [page, setPage] = useState<any>();
 
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/${pageId}.json`)
       .then((response) => {
-        setHTMLString(response.data.htmlString);
+        setPageData(response.data);
         setPage(response.data.page);
       })
       .catch((error) => {
@@ -33,7 +33,7 @@ const DetailPage: NextPage<Props> = (props: Props) => {
     <div className="border bg-white p-5">
       {error == null ? (
         <>
-          {htmlString == null ? (
+          {pageData == null ? (
             <div className="spinner-border" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
@@ -48,6 +48,10 @@ const DetailPage: NextPage<Props> = (props: Props) => {
               <hr />
               <img src={page.creator.imageUrlCached} width="100" height="100" alt="" />
               <p><strong>{page.creator.name}</strong></p>
+            </>
+            <>
+              <h2 className="pb-5 fw-bold">{pageData.title}</h2>
+              {parse(pageData.htmlString)}
             </>
           )}
         </>

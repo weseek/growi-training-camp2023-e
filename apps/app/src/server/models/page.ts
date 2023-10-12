@@ -473,10 +473,19 @@ export class PageQueryBuilder {
 
   populateDataToList(userPublicFields): PageQueryBuilder {
     this.query = this.query
-      .populate({
-        path: 'lastUpdateUser',
-        select: userPublicFields,
-      });
+      .populate(
+        [
+          {
+            path: 'lastUpdateUser',
+            select: userPublicFields,
+          },
+          {
+            path: 'creator',
+            select: userPublicFields,
+          },
+        ],
+
+      );
     return this;
   }
 
