@@ -19,6 +19,7 @@ const DetailPage: NextPage<Props> = (props: Props) => {
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/${pageId}.json`)
       .then((response) => {
+        console.log(response);
         setHTMLString(response.data.htmlString);
       })
       .catch((error) => {

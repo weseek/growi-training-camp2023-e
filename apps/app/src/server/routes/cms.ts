@@ -11,6 +11,19 @@ const logger = loggerFactory('growi:routes:cms:pages');
 module.exports = function(crowi) {
   const Page = crowi.model('Page');
 
+  const generatePageDataForCMS = (page) => {
+    const md = new MarkdownIt({ html: true, linkify: true });
+    md.use(markdownItMeta).use(markdownItEmoji);
+    const htmlString = md.render(page.revision.body);
+    const frontMatter = md.meta.cms;
+    // frontMatter に title が存在しなければ、path の最後の '/' 以降の文字列をタイトルにする
+    const title = frontMatter?.title || page.path.match(/([^/]+)$/)[1];
+
+    return {
+      page, title, htmlString, frontMatter,
+    };
+  };
+
   const actions: any = {};
   const api: any = {};
 
@@ -62,14 +75,9 @@ module.exports = function(crowi) {
       return timeB - timeA;
     });
 
-    const pagesWithHTMLString = pagesSortedByPublishedAt.map((page) => {
-      const md = new MarkdownIt({ html: true, linkify: true });
-      md.use(markdownItMeta).use(markdownItEmoji);
+    const pagesDataForCMS = pagesSortedByPublishedAt.map(page => generatePageDataForCMS(page));
 
-      return { page, htmlString: md.render(page.revision.body), frontMatter: md.meta.cms };
-    });
-
-    return res.json(ApiResponse.success(pagesWithHTMLString));
+    return res.json(ApiResponse.success(pagesDataForCMS));
   };
 
   api.get = async function(req, res) {
@@ -106,10 +114,9 @@ module.exports = function(crowi) {
       }
     }
 
-    const md = new MarkdownIt({ html: true, linkify: true });
-    md.use(markdownItMeta).use(markdownItEmoji);
+    const pageDataForCMS = generatePageDataForCMS(page);
 
-    return res.json(ApiResponse.success({ page, htmlString: md.render(page.revision.body), frontMatter: md.meta.cms }));
+    return res.json(ApiResponse.success(pageDataForCMS));
   };
 
   return actions;
