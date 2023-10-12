@@ -53,7 +53,7 @@ const CmsPage: NextPageWithLayout<CommonProps> = (props: Props) => {
 
   const { data: isDrawerMode } = useDrawerMode();
 
-  const title = generateCustomTitleForPage(props, 'GROWI CMS Manager');
+  const title = generateCustomTitleForPage(props, 'Contents Management System');
 
   return (
     <>
@@ -63,7 +63,7 @@ const CmsPage: NextPageWithLayout<CommonProps> = (props: Props) => {
       <div className="dynamic-layout-root">
         <header className="py-0 position-relative">
           <GrowiSubNavigation
-            pagePath="/GROWI CMS Manager"
+            pagePath="/Contents Management System"
             showDrawerToggler={isDrawerMode}
             isTagLabelsDisabled
             isDrawerMode={isDrawerMode}

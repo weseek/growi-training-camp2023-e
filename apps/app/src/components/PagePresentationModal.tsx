@@ -10,7 +10,7 @@ import {
 
 import { useIsEnabledMarp } from '~/stores/context';
 import { usePagePresentationModal } from '~/stores/modal';
-import { useSWRxCurrentPage } from '~/stores/page';
+import { useSWRxCurrentPage, useSWRxPageRevision } from '~/stores/page';
 import { usePresentationViewOptions } from '~/stores/renderer';
 import { useNextThemes } from '~/stores/use-next-themes';
 
@@ -26,15 +26,22 @@ const Presentation = dynamic<PresentationProps>(() => import('./Presentation/Pre
 });
 
 
-const PagePresentationModal = (): JSX.Element => {
+export const PagePresentationModal = (): JSX.Element => {
 
+  const { data: currentPage } = useSWRxCurrentPage();
   const { data: presentationModalData, close: closePresentationModal } = usePagePresentationModal();
+
+  const { isOpened = false, page: specifiedPage, rendererOptions: specifiedRendererOptions } = presentationModalData ?? {};
+
+  const { data: specifiedRevision } = useSWRxPageRevision(
+    isOpened ? specifiedPage?.pageId : undefined,
+    isOpened ? specifiedPage?.revisionId : undefined,
+  );
 
   const { isDarkMode } = useNextThemes();
   const fullscreen = useFullScreen();
 
-  const { data: currentPage } = useSWRxCurrentPage();
-  const { data: rendererOptions } = usePresentationViewOptions();
+  const { data: presentationViewOptions } = usePresentationViewOptions();
 
   const { data: isEnabledMarp } = useIsEnabledMarp();
 
@@ -54,17 +61,16 @@ const PagePresentationModal = (): JSX.Element => {
     closePresentationModal();
   }, [fullscreen, closePresentationModal]);
 
-  const isOpen = presentationModalData?.isOpened ?? false;
-
-  if (!isOpen) {
+  if (!isOpened) {
     return <></>;
   }
 
-  const markdown = currentPage?.revision.body;
+  const markdown = (specifiedRevision ?? currentPage?.revision)?.body;
+  const rendererOptions = (specifiedRendererOptions ?? presentationViewOptions) as ReactMarkdownOptions;
 
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen={isOpened}
       toggle={closeHandler}
       data-testid="page-presentation-modal"
       className={`grw-presentation-modal ${styles['grw-presentation-modal']}`}
@@ -81,7 +87,7 @@ const PagePresentationModal = (): JSX.Element => {
         { rendererOptions != null && isEnabledMarp != null && (
           <Presentation
             options={{
-              rendererOptions: rendererOptions as ReactMarkdownOptions,
+              rendererOptions,
               revealOptions: {
                 embedded: true,
                 hash: true,
@@ -97,5 +103,3 @@ const PagePresentationModal = (): JSX.Element => {
     </Modal>
   );
 };
-
-export default PagePresentationModal;

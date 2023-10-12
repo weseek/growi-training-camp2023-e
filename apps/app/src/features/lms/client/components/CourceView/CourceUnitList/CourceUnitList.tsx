@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import type {
   IPageHasId,
 } from '@growi/core';
 
 import { IPagingResult } from '~/interfaces/paging-result';
-import { useIsSharedUser } from '~/stores/context';
+import { useIsSharedUser, useRendererConfig } from '~/stores/context';
+import { usePagePresentationModal } from '~/stores/modal';
+import { useCurrentPagePath } from '~/stores/page';
 import {
   useSWRxPageList,
 } from '~/stores/page-listing';
+
+import { generatePresentationCourceUnitOptions } from '../../../services/renderer/renderer';
 
 import { CourceUnitHead, CourceUnitRow } from './CourceUnitRow';
 
@@ -20,6 +24,28 @@ type SubstanceProps = {
 const CourceUnitListSubstance = (props: SubstanceProps): JSX.Element => {
 
   const { pagingResult } = props;
+
+  const { data: currentPagePath } = useCurrentPagePath();
+  const { open: openPresentationModal } = usePagePresentationModal();
+
+  const { data: rendererConfig } = useRendererConfig();
+
+  const rendererOptions = useMemo(() => {
+    if (rendererConfig == null || currentPagePath == null) {
+      return null;
+    }
+    return generatePresentationCourceUnitOptions(rendererConfig, currentPagePath);
+  }, [currentPagePath, rendererConfig]);
+
+  const playHandler = useCallback((page: IPageHasId) => {
+    openPresentationModal({
+      page: {
+        pageId: page._id,
+        revisionId: page.revision.toString(),
+      },
+      rendererOptions,
+    });
+  }, [openPresentationModal, rendererOptions]);
 
   // const pageDeletedHandler: OnDeletedFunction = useCallback((...args) => {
   //   const path = args[0];
@@ -39,7 +65,7 @@ const CourceUnitListSubstance = (props: SubstanceProps): JSX.Element => {
 
   if (pagingResult == null) {
     return (
-      <div className="wiki">
+      <div>
         <div className="text-muted text-center">
           <i className="fa fa-2x fa-spinner fa-pulse mr-1"></i>
         </div>
@@ -48,7 +74,7 @@ const CourceUnitListSubstance = (props: SubstanceProps): JSX.Element => {
   }
 
   const rowList = pagingResult.items.map(page => (
-    <CourceUnitRow page={page} />
+    <CourceUnitRow key={page._id} page={page} onPlayButtonClicked={playHandler} />
   ));
 
   return (
