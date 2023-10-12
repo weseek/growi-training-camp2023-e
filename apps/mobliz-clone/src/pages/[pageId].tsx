@@ -17,7 +17,7 @@ const DetailPage: NextPage<Props> = (props: Props) => {
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/_cms/${pageId}.json`)
+    axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/${pageId}.json`)
       .then((response) => {
         setHTMLString(response.data.htmlString);
       })

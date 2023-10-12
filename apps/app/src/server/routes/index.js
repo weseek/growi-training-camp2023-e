@@ -187,6 +187,7 @@ module.exports = function(crowi, app) {
 
   app.use('/ogp', express.Router().get('/:pageId([0-9a-z]{0,})', loginRequired, ogp.pageIdRequired, ogp.ogpValidator, ogp.renderOgp));
 
+  app.get('/_cms/list.json', cms.api.list);
   app.get('/_cms/:pageId.json', cms.api.get);
   app.get('/_cms/tags', tag.api.list);
 
