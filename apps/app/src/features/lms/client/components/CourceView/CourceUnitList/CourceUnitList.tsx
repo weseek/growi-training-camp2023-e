@@ -39,7 +39,7 @@ const CourceUnitListSubstance = (props: SubstanceProps): JSX.Element => {
 
   if (pagingResult == null) {
     return (
-      <div className="wiki">
+      <div>
         <div className="text-muted text-center">
           <i className="fa fa-2x fa-spinner fa-pulse mr-1"></i>
         </div>

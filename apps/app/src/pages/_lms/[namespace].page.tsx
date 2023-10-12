@@ -75,7 +75,7 @@ const CourcePage: NextPageWithLayout<CommonProps> = (props: Props) => {
         </header>
 
         <div className="content-main container-lg grw-container-convertible mb-5 pb-5">
-          <div className="d-flex align-items-end justify-content-between mt-4">
+          <div className="mt-4">
             <h1>{props.courceTitle}</h1>
           </div>
           <CourceView />
