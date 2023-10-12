@@ -58,7 +58,7 @@ const CourceUnitListSubstance = (props: SubstanceProps): JSX.Element => {
   }
 
   const rowList = pagingResult.items.map(page => (
-    <CourceUnitRow page={page} onPlayButtonClicked={playHandler} />
+    <CourceUnitRow key={page._id} page={page} onPlayButtonClicked={playHandler} />
   ));
 
   return (

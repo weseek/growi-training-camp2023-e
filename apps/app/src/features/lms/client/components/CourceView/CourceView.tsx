@@ -25,11 +25,11 @@ export const CourceView = (): JSX.Element => {
   const Toggler = () => (
     <div className="btn-group btn-group-toggle" data-toggle="buttons">
       <label className={`btn btn-outline-secondary ${isDashboardMode ? 'active' : ''}`} onClick={() => setDashboardMode(true)}>
-        <input type="radio" name="options" id="option1" checked={isDashboardMode} />
+        <input type="radio" name="options" id="option1" checked={isDashboardMode} onChange={() => setDashboardMode(true)} />
         <span className="icon icon-graph"></span>
       </label>
       <label className={`btn btn-outline-secondary ${isDashboardMode ? '' : 'active'}`} onClick={() => setDashboardMode(false)}>
-        <input type="radio" name="options" id="option2" checked={!isDashboardMode} />
+        <input type="radio" name="options" id="option2" checked={!isDashboardMode} onChange={() => setDashboardMode(true)} />
         <span className="icon icon-list"></span>
       </label>
     </div>
