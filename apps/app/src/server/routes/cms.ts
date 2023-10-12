@@ -1,5 +1,6 @@
-import md from 'markdown-it';
-import emoji from 'markdown-it-emoji';
+import MarkdownIt from 'markdown-it';
+import markdownItEmoji from 'markdown-it-emoji';
+import markdownItMeta from 'markdown-it-meta';
 
 import loggerFactory from '~/utils/logger';
 
@@ -62,7 +63,10 @@ module.exports = function(crowi) {
     });
 
     const pagesWithHTMLString = pagesSortedByPublishedAt.map((page) => {
-      return { page, htmlString: md({ html: true, linkify: true }).use(emoji).render(page.revision.body) };
+      const md = new MarkdownIt({ html: true, linkify: true });
+      md.use(markdownItMeta).use(markdownItEmoji);
+
+      return { page, htmlString: md.render(page.revision.body), frontMatter: md.meta.cms };
     });
 
     return res.json(ApiResponse.success(pagesWithHTMLString));
@@ -102,9 +106,10 @@ module.exports = function(crowi) {
       }
     }
 
-    const htmlString = md({ html: true, linkify: true }).use(emoji).render(page.revision.body);
+    const md = new MarkdownIt({ html: true, linkify: true });
+    md.use(markdownItMeta).use(markdownItEmoji);
 
-    return res.json(ApiResponse.success({ page, htmlString }));
+    return res.json(ApiResponse.success({ page, htmlString: md.render(page.revision.body), frontMatter: md.meta.cms }));
   };
 
   return actions;
