@@ -3709,6 +3709,7 @@ class PageService {
     await this.updateDescendantCountOfAncestors(page._id, 1, false);
 
     // Update cmsMetadata
+    // TODO: update only when the document is under a valid cms namespace
     const cmsMetadata = extractCmsMetadata(page.revision.body);
     if (cmsMetadata != null) {
       page.updateCmsMetadata(cmsMetadata);
@@ -3935,6 +3936,7 @@ class PageService {
     }
 
     // 4. Update cmsMetadata
+    // TODO: update only when the document is under a valid cms namespace
     const cmsMetadata = extractCmsMetadata(currentPage.revision.body);
     if (cmsMetadata != null) {
       await currentPage.updateCmsMetadata(cmsMetadata);
