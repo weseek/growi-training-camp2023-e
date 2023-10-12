@@ -22,7 +22,7 @@ const PageCreateModal = dynamic(() => import('../PageCreateModal'), { ssr: false
 const PageDuplicateModal = dynamic(() => import('../PageDuplicateModal'), { ssr: false });
 const PageDeleteModal = dynamic(() => import('../PageDeleteModal'), { ssr: false });
 const PageRenameModal = dynamic(() => import('../PageRenameModal'), { ssr: false });
-const PagePresentationModal = dynamic(() => import('../PagePresentationModal'), { ssr: false });
+const PagePresentationModal = dynamic(() => import('../PagePresentationModal').then(mod => mod.PagePresentationModal), { ssr: false });
 const PageAccessoriesModal = dynamic(() => import('../PageAccessoriesModal').then(mod => mod.PageAccessoriesModal), { ssr: false });
 const DeleteBookmarkFolderModal = dynamic(() => import('../DeleteBookmarkFolderModal').then(mod => mod.DeleteBookmarkFolderModal), { ssr: false });
 // Fab

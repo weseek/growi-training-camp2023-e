@@ -251,10 +251,17 @@ export const usePutBackPageModal = (status?: PutBackPageModalStatus): SWRRespons
 */
 type PresentationModalStatus = {
   isOpened: boolean,
+  page?: {
+    pageId: string,
+    revisionId: string,
+  },
 }
 
 type PresentationModalStatusUtils = {
-  open(): Promise<PresentationModalStatus | undefined>
+  open(page?: {
+    pageId: string,
+    revisionId: string,
+  }): Promise<PresentationModalStatus | undefined>
   close(): Promise<PresentationModalStatus | undefined>
 }
 
@@ -268,8 +275,8 @@ export const usePagePresentationModal = (
 
   return {
     ...swrResponse,
-    open: () => swrResponse.mutate({ isOpened: true }, { revalidate: true }),
-    close: () => swrResponse.mutate({ isOpened: false }),
+    open: page => swrResponse.mutate({ isOpened: true, page }, { revalidate: true }),
+    close: () => swrResponse.mutate({ isOpened: false, page: undefined }),
   };
 };
 
