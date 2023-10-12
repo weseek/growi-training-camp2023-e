@@ -21,6 +21,7 @@ type Props = {
 
 export const ArticleListRow = (props: Props): JSX.Element => {
   const { page } = props;
+  const author = page.creator.name;
 
   const dPagePath: DevidedPagePath = new DevidedPagePath(page.path, false);
   const linkedPagePath = new LinkedPagePath(dPagePath.latter);
@@ -30,7 +31,7 @@ export const ArticleListRow = (props: Props): JSX.Element => {
       <td>
         <PagePathHierarchicalLink linkedPagePath={linkedPagePath} basePath={dPagePath.isRoot ? undefined : dPagePath.former} />
       </td>
-      <td>author</td>
+      <td>{author}</td>
       <td>(TBD)</td>
     </tr>
   );
