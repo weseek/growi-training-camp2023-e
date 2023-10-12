@@ -45,8 +45,11 @@ const DetailPage: NextPage<Props> = (props: Props) => {
             <>
               <p>{dateFnsFormat(new Date(dataTest?.page.createdAt), 'yyyy.MM.dd')}</p>
               <p>{dateFnsFormat(new Date(dataTest?.page.updatedAt), 'yyyy.MM.dd')}</p>
-              <p>{dataTest?.page.creator.name}</p>
+
               {parse(htmlString)}
+              <hr />
+              <img src={dataTest?.page.creator.imageUrlCached} width="100" height="100" alt="" />
+              <p><strong>{dataTest?.page.creator.name}</strong></p>
             </>
           )}
         </>
