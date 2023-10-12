@@ -23,7 +23,7 @@ import {
   getServerSideCommonProps, getNextI18NextConfig, generateCustomTitleForPage, useInitSidebarConfig,
 } from '../utils/commons';
 
-const CourceList = dynamic(() => import('~/features/lms/client/components/CourceList').then(mod => mod.CourceList), { ssr: false });
+const CourceList = dynamic(() => import('~/features/lms/client/components').then(mod => mod.CourceList), { ssr: false });
 
 type Props = CommonProps & {
   currentUser: IUser,

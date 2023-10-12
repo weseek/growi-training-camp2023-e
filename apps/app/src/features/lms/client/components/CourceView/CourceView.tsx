@@ -1,10 +1,16 @@
 import { useState } from 'react';
 
+import dynamic from 'next/dynamic';
 import { TabContent, TabPane } from 'reactstrap';
 
 import { useCurrentPathname } from '~/stores/context';
 
-import { CourceUnitList } from '../CourceUnitList';
+import { CourceUnitList } from './CourceUnitList';
+
+
+const CourceDashboard = dynamic(() => import('./CourceDashboard').then(mod => mod.CourceDashboard), {
+  ssr: false,
+});
 
 export const CourceView = (): JSX.Element => {
 
@@ -37,7 +43,7 @@ export const CourceView = (): JSX.Element => {
       <div className="mt-3">
         <TabContent activeTab={isDashboardMode ? 'dashboard' : 'list'}>
           <TabPane tabId="dashboard">
-            Dashboard
+            <CourceDashboard />
           </TabPane>
           <TabPane tabId="list">
             <CourceUnitList path={currentPagePath} />

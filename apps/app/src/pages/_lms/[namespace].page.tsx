@@ -7,7 +7,6 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 import { GrowiSubNavigation } from '~/components/Navbar/GrowiSubNavigation';
-import { CourceView } from '~/features/lms/client/components/CourceView';
 import type { CrowiRequest } from '~/interfaces/crowi-request';
 import { useCurrentPageId } from '~/stores/page';
 import { useDrawerMode } from '~/stores/ui';
@@ -24,7 +23,7 @@ import {
   getServerSideCommonProps, getNextI18NextConfig, generateCustomTitleForPage, useInitSidebarConfig,
 } from '../utils/commons';
 
-const CourceUnitList = dynamic(() => import('~/features/lms/client/components/CourceUnitList').then(mod => mod.CourceUnitList), { ssr: false });
+const CourceView = dynamic(() => import('~/features/lms/client/components').then(mod => mod.CourceView), { ssr: false });
 
 type Props = CommonProps & {
   currentUser: IUser,
