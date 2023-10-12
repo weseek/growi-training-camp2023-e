@@ -26,7 +26,7 @@ some text
     // when
     const result = extract(`---
 title: This is the Title
-cmsMetadata:
+cms:
   foo: bar
 ---
 

@@ -10,5 +10,5 @@ export const extract = (markdown: string): Record<string, any> | undefined => {
     return undefined;
   }
 
-  return yaml.load(frontmatter).cmsMetadata;
+  return yaml.load(frontmatter).cms;
 };
