@@ -31,7 +31,7 @@ export const PagePresentationModal = (): JSX.Element => {
   const { data: currentPage } = useSWRxCurrentPage();
   const { data: presentationModalData, close: closePresentationModal } = usePagePresentationModal();
 
-  const { isOpened = false, page: specifiedPage } = presentationModalData ?? {};
+  const { isOpened = false, page: specifiedPage, rendererOptions: specifiedRendererOptions } = presentationModalData ?? {};
 
   const { data: specifiedRevision } = useSWRxPageRevision(
     isOpened ? specifiedPage?.pageId : undefined,
@@ -41,7 +41,7 @@ export const PagePresentationModal = (): JSX.Element => {
   const { isDarkMode } = useNextThemes();
   const fullscreen = useFullScreen();
 
-  const { data: rendererOptions } = usePresentationViewOptions();
+  const { data: presentationViewOptions } = usePresentationViewOptions();
 
   const { data: isEnabledMarp } = useIsEnabledMarp();
 
@@ -66,6 +66,7 @@ export const PagePresentationModal = (): JSX.Element => {
   }
 
   const markdown = (specifiedRevision ?? currentPage?.revision)?.body;
+  const rendererOptions = (specifiedRendererOptions ?? presentationViewOptions) as ReactMarkdownOptions;
 
   return (
     <Modal
@@ -86,7 +87,7 @@ export const PagePresentationModal = (): JSX.Element => {
         { rendererOptions != null && isEnabledMarp != null && (
           <Presentation
             options={{
-              rendererOptions: rendererOptions as ReactMarkdownOptions,
+              rendererOptions,
               revealOptions: {
                 embedded: true,
                 hash: true,

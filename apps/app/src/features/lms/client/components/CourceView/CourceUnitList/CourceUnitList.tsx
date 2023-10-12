@@ -1,15 +1,18 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import type {
   IPageHasId,
 } from '@growi/core';
 
 import { IPagingResult } from '~/interfaces/paging-result';
-import { useIsSharedUser } from '~/stores/context';
+import { useIsSharedUser, useRendererConfig } from '~/stores/context';
 import { usePagePresentationModal } from '~/stores/modal';
+import { useCurrentPagePath } from '~/stores/page';
 import {
   useSWRxPageList,
 } from '~/stores/page-listing';
+
+import { generatePresentationCourceUnitOptions } from '../../../services/renderer/renderer';
 
 import { CourceUnitHead, CourceUnitRow } from './CourceUnitRow';
 
@@ -22,14 +25,27 @@ const CourceUnitListSubstance = (props: SubstanceProps): JSX.Element => {
 
   const { pagingResult } = props;
 
+  const { data: currentPagePath } = useCurrentPagePath();
   const { open: openPresentationModal } = usePagePresentationModal();
+
+  const { data: rendererConfig } = useRendererConfig();
+
+  const rendererOptions = useMemo(() => {
+    if (rendererConfig == null || currentPagePath == null) {
+      return null;
+    }
+    return generatePresentationCourceUnitOptions(rendererConfig, currentPagePath);
+  }, [currentPagePath, rendererConfig]);
 
   const playHandler = useCallback((page: IPageHasId) => {
     openPresentationModal({
-      pageId: page._id,
-      revisionId: page.revision.toString(),
+      page: {
+        pageId: page._id,
+        revisionId: page.revision.toString(),
+      },
+      rendererOptions,
     });
-  }, [openPresentationModal]);
+  }, [openPresentationModal, rendererOptions]);
 
   // const pageDeletedHandler: OnDeletedFunction = useCallback((...args) => {
   //   const path = args[0];

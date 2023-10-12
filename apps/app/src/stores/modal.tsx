@@ -8,6 +8,7 @@ import { SWRResponse } from 'swr';
 import Linker from '~/client/models/Linker';
 import MarkdownTable from '~/client/models/MarkdownTable';
 import { BookmarkFolderItems } from '~/interfaces/bookmark-info';
+import type { RendererOptions } from '~/interfaces/renderer-options';
 import {
   OnDuplicatedFunction, OnRenamedFunction, OnDeletedFunction, OnPutBackedFunction, onDeletedBookmarkFolderFunction,
 } from '~/interfaces/ui';
@@ -249,19 +250,19 @@ export const usePutBackPageModal = (status?: PutBackPageModalStatus): SWRRespons
 /*
 * PagePresentationModal
 */
-type PresentationModalStatus = {
-  isOpened: boolean,
+type PresentationModalRenderingOpts = {
   page?: {
     pageId: string,
     revisionId: string,
   },
+  rendererOptions?: RendererOptions | null,
+}
+type PresentationModalStatus = PresentationModalRenderingOpts & {
+  isOpened: boolean,
 }
 
 type PresentationModalStatusUtils = {
-  open(page?: {
-    pageId: string,
-    revisionId: string,
-  }): Promise<PresentationModalStatus | undefined>
+  open(opts?: PresentationModalRenderingOpts): Promise<PresentationModalStatus | undefined>
   close(): Promise<PresentationModalStatus | undefined>
 }
 
@@ -269,14 +270,15 @@ export const usePagePresentationModal = (
     status?: PresentationModalStatus,
 ): SWRResponse<PresentationModalStatus, Error> & PresentationModalStatusUtils => {
   const initialData: PresentationModalStatus = {
+    ...status,
     isOpened: false,
   };
   const swrResponse = useStaticSWR<PresentationModalStatus, Error>('presentationModalStatus', status, { fallbackData: initialData });
 
   return {
     ...swrResponse,
-    open: page => swrResponse.mutate({ isOpened: true, page }, { revalidate: true }),
-    close: () => swrResponse.mutate({ isOpened: false, page: undefined }),
+    open: opts => swrResponse.mutate({ isOpened: true, ...opts }, { revalidate: true }),
+    close: () => swrResponse.mutate({ isOpened: false, page: undefined, rendererOptions: undefined }),
   };
 };
 
