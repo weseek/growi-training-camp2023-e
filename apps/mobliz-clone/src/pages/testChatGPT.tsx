@@ -5,22 +5,22 @@ import { NextPage } from 'next';
 import axios from '~/utils/axios';
 
 const TestChatGPT: NextPage = () => {
-  const [responseMessage, setResponseMessage] = useState();
+  const [responseMessages, setResponseMessages] = useState<string[]>([]);
   const genreInputRef = useRef<HTMLInputElement>(null);
 
-  const URL = 'https://api.openai.com/v1/completions';
+  const URL = 'https://api.openai.com/v1/chat/completions';
   const API_KEY = '';
 
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
       const genre = genreInputRef.current?.value;
-      const requestText = `${genre}に関する4択の問題を1問出題して`;
+      const requestText = `${genre}に関する4択の問題を1問出題して。問題文と選択肢のみを返して。`;
 
       const response = await axios.post(
         URL,
         {
-          model: 'gpt-3.5-turbo',
+          model: 'gpt-4',
           messages: [
             { role: 'user', content: requestText },
           ],
@@ -33,7 +33,7 @@ const TestChatGPT: NextPage = () => {
         },
       );
       const chatGPTResponse = response.data.choices[0].message.content;
-      setResponseMessage(chatGPTResponse);
+      setResponseMessages(prevResponseMessages => [...prevResponseMessages, chatGPTResponse]);
     }
     catch (error) {
       console.error(error);
@@ -48,7 +48,9 @@ const TestChatGPT: NextPage = () => {
         </label>
         <button type="submit">送信</button>
       </form>
-      <p className="card mt-4">{responseMessage}</p>
+      {responseMessages.map((responseMessage) => {
+        return (<p className="card p-3 mt-4">{responseMessage}</p>);
+      })}
     </div>
   );
 };
