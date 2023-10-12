@@ -38,7 +38,6 @@ const TopPage: NextPage = () => {
                         <p className="me-4"> {dateFnsFormat(new Date(pageData.page.createdAt), 'yyyy.MM.dd')}</p>
                         <div> {dateFnsFormat(new Date(pageData.page.updatedAt), 'yyyy.MM.dd')}</div>
                       </div>
-                      <h2 className="pb-5 fw-bold">{pageData.title}</h2>
                       {parse(pageData.htmlString)}
                     </div>
                     <a href={`/${pageData.page._id}`} className="btn btn-outline-primary text-decoration-none rounded-0 mt-4">

@@ -1,6 +1,5 @@
-import MarkdownIt from 'markdown-it';
-import markdownItEmoji from 'markdown-it-emoji';
-import markdownItMeta from 'markdown-it-meta';
+import md from 'markdown-it';
+import emoji from 'markdown-it-emoji';
 
 import loggerFactory from '~/utils/logger';
 
@@ -10,19 +9,6 @@ const logger = loggerFactory('growi:routes:cms:pages');
 
 module.exports = function(crowi) {
   const Page = crowi.model('Page');
-
-  const generatePageDataForCMS = (page) => {
-    const md = new MarkdownIt({ html: true, linkify: true });
-    md.use(markdownItMeta).use(markdownItEmoji);
-    const htmlString = md.render(page.revision.body);
-    const frontMatter = md.meta.cms;
-    // frontMatter に title が存在しなければ、path の最後の '/' 以降の文字列をタイトルにする
-    const title = frontMatter?.title || page.path.match(/([^/]+)$/)[1];
-
-    return {
-      page, title, htmlString, frontMatter,
-    };
-  };
 
   const actions: any = {};
   const api: any = {};
@@ -62,22 +48,11 @@ module.exports = function(crowi) {
       pages.pop();
     }
 
-    // TODO: filter と sort の処理を mongoDB のクエリ実行時に行う
-    // cmsMetadata に publishedAt が存在し、かつその日時が現在時刻以前のものを絞り込む
-    const filteredPages = pages.filter((page) => {
-      const publishedAt = page?.cmsMetadata?.get('publishedAt');
-      return publishedAt != null && new Date() > new Date(publishedAt);
+    const pagesWithHTMLString = pages.map((page) => {
+      return { page, htmlString: md({ html: true, linkify: true }).use(emoji).render(page.revision.body) };
     });
 
-    const pagesSortedByPublishedAt = filteredPages.sort((a, b) => {
-      const timeA = new Date(a.cmsMetadata.get('publishedAt')).getTime();
-      const timeB = new Date(b.cmsMetadata.get('publishedAt')).getTime();
-      return timeB - timeA;
-    });
-
-    const pagesDataForCMS = pagesSortedByPublishedAt.map(page => generatePageDataForCMS(page));
-
-    return res.json(ApiResponse.success(pagesDataForCMS));
+    return res.json(ApiResponse.success(pagesWithHTMLString));
   };
 
   api.get = async function(req, res) {
@@ -114,9 +89,9 @@ module.exports = function(crowi) {
       }
     }
 
-    const pageDataForCMS = generatePageDataForCMS(page);
+    const htmlString = md({ html: true, linkify: true }).use(emoji).render(page.revision.body);
 
-    return res.json(ApiResponse.success(pageDataForCMS));
+    return res.json(ApiResponse.success({ page, htmlString }));
   };
 
   return actions;

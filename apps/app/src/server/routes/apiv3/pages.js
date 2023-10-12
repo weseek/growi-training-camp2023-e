@@ -714,7 +714,6 @@ module.exports = (crowi) => {
       result.pages.forEach((page) => {
         if (page.lastUpdateUser != null && page.lastUpdateUser instanceof User) {
           page.lastUpdateUser = serializeUserSecurely(page.lastUpdateUser);
-          page.creator = serializeUserSecurely(page.creator);
         }
       });
 

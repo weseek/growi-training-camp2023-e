@@ -17,7 +17,6 @@ import loggerFactory from '~/utils/logger';
 import { UncontrolledCodeMirror } from '../UncontrolledCodeMirror';
 
 import AbstractEditor from './AbstractEditor';
-import { generateCMSOrLMSText } from './ChatGPTHelper';
 import CommentMentionHelper from './CommentMentionHelper';
 import EditorIcon from './EditorIcon';
 import EmojiPicker from './EmojiPicker';
@@ -853,15 +852,6 @@ class CodeMirrorEditor extends AbstractEditor {
     this.props.onClickTemplateBtn({ onSubmit });
   }
 
-  async renderChatGPTText() {
-    const cm = this.getCodeMirror();
-    const generatedText = await generateCMSOrLMSText(cm.getValue());
-
-    if (generatedText != null) {
-      cm.setValue(generatedText);
-    }
-  }
-
   showLinkEditModal() {
     const onSubmit = (linkText) => {
       return markdownLinkUtil.replaceFocusedMarkdownLinkWithEditor(this.getCodeMirror(), linkText);
@@ -1060,15 +1050,6 @@ class CodeMirrorEditor extends AbstractEditor {
         onClick={() => this.showTemplateModal()}
       >
         <EditorIcon icon="Template" />
-      </Button>,
-      <Button
-        key="nav-item-template"
-        color={null}
-        bssize="small"
-        title="ChatGPT"
-        onClick={() => this.renderChatGPTText()}
-      >
-        <EditorIcon icon="ChatGPT" />
       </Button>,
     ];
   }
