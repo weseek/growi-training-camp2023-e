@@ -43,9 +43,9 @@ const DetailPage: NextPage<Props> = (props: Props) => {
             </div>
           ) : (
             <>
-              <div className="post-meta list-inline d-flex">
-                <div className="date published me-4"><i className="fa fa-clock-o"></i> {dateFnsFormat(new Date(dataTest?.page.createdAt), 'yyyy.MM.dd')}</div>
-                <div className="date update"><i className="fa fa-repeat"></i> {dateFnsFormat(new Date(dataTest?.page.updatedAt), 'yyyy.MM.dd')}</div>
+              <div className="list-inline d-flex mb-4">
+                <p className="me-4"> {dateFnsFormat(new Date(dataTest?.page.createdAt), 'yyyy.MM.dd')}</p>
+                <div> {dateFnsFormat(new Date(dataTest?.page.updatedAt), 'yyyy.MM.dd')}</div>
               </div>
 
               {parse(htmlString)}
