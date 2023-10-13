@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import dateFnsFormat from 'date-fns/format';
 import parse from 'html-react-parser';
 import { NextPage, GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -36,8 +37,15 @@ const DetailPage: NextPage<Props> = (props: Props) => {
             </div>
           ) : (
             <>
+              <div className="list-inline d-flex mb-4">
+                <p className="me-4"> {dateFnsFormat(new Date(pageData.page.createdAt), 'yyyy.MM.dd')}</p>
+                <div> {dateFnsFormat(new Date(pageData.page.updatedAt), 'yyyy.MM.dd')}</div>
+              </div>
               <h2 className="pb-5 fw-bold">{pageData.title}</h2>
               {parse(pageData.htmlString)}
+              <hr />
+              <img src={pageData.page.creator.imageUrlCached} width="100" height="100" alt="" />
+              <p><strong>{pageData.page.creator.name}</strong></p>
             </>
           )}
         </>
