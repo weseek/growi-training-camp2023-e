@@ -7,12 +7,12 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
 import { GrowiSubNavigation } from '~/components/Navbar/GrowiSubNavigation';
+import { CourceLayout } from '~/features/lms/client/components/CourceLayout';
 import type { CrowiRequest } from '~/interfaces/crowi-request';
 import type { RendererConfig } from '~/interfaces/services/renderer';
 import { useCurrentPageId } from '~/stores/page';
 import { useDrawerMode } from '~/stores/ui';
 
-import { BasicLayout } from '../../components/Layout/BasicLayout';
 import {
   useCurrentUser, useCurrentPathname, useGrowiCloudUri,
   useIsSearchServiceConfigured, useIsSearchServiceReachable,
@@ -69,23 +69,12 @@ const CourcePage: NextPageWithLayout<CommonProps> = (props: Props) => {
         <title>{title}</title>
       </Head>
       <div className="dynamic-layout-root">
-        <header className="py-0 position-relative">
-          <GrowiSubNavigation
-            pagePath={props.currentPathname}
-            showDrawerToggler={isDrawerMode}
-            isTagLabelsDisabled
-            isDrawerMode={isDrawerMode}
-            additionalClasses={['container-fluid']}
-          />
-        </header>
-
-        <div className="content-main container-lg grw-container-convertible mb-5 pb-5">
-          <div className="mt-4">
+        <div className="container-fluid">
+          <header className="mb-5">
             <h1>{props.courceTitle}</h1>
-          </div>
+          </header>
           <CourceView />
         </div>
-
       </div>
     </>
   );
@@ -99,7 +88,7 @@ const Layout = ({ children, ...props }: LayoutProps): JSX.Element => {
   // init sidebar config with UserUISettings and sidebarConfig
   useInitSidebarConfig(props.sidebarConfig, props.userUISettings);
 
-  return <BasicLayout>{children}</BasicLayout>;
+  return <CourceLayout>{children}</CourceLayout>;
 };
 
 CourcePage.getLayout = function getLayout(page) {
