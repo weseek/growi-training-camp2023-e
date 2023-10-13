@@ -14,6 +14,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <SideMenu />
         </div>
       </main>
+      <footer className="bg-white mt-5 border-top">
+        <p className="text-end p-4 mb-0"><small>© Copyright 2023 WESEEK Tech Blog. All rights reserved.</small></p>
+      </footer>
     </>
   );
 };
