@@ -240,6 +240,23 @@
     }
   }
 
+  /*********************
+   * CMS styles
+   */
+  .preview-cms {
+    padding-top: 200px !important;
+    background-color: #f9f9f9;
+    background-image: url('../../public/images/weseek-blog-header.jpg');
+    background-repeat: no-repeat;
+    background-size: 100% 170px;
+    .wiki{
+      width: 86%;
+      padding: 32px;
+      background-color: #fff;
+      border: solid 1px #ccc;
+    }
+  }
+
   // .builtin-editor .tab-pane#edit
 
   &.hackmd {

@@ -23,7 +23,7 @@ const Preview = React.forwardRef((props: Props, ref: RefObject<HTMLDivElement>):
 
   return (
     <div
-      className={`page-editor-preview-body ${pagePath === '/Sidebar' ? 'preview-sidebar' : ''}`}
+      className={`page-editor-preview-body ${pagePath === '/Sidebar' ? 'preview-sidebar' : ''} ${pagePath?.startsWith('/_cms') ? 'preview-cms' : ''}`}
       ref={ref}
       onScroll={(event: SyntheticEvent<HTMLDivElement>) => {
         if (props.onScroll != null) {
