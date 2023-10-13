@@ -34,8 +34,8 @@ const TopPage: NextPage = () => {
                 return (
                   <div className={`border bg-white p-5${index === 0 ? '' : ' mt-5'}`}>
                     <div className="list-inline d-flex mb-4">
-                      <p className="me-4"> {dateFnsFormat(new Date(data.page.createdAt), 'yyyy.MM.dd')}</p>
-                      <div> {dateFnsFormat(new Date(data.page.updatedAt), 'yyyy.MM.dd')}</div>
+                      <p className="me-4">{dateFnsFormat(new Date(data.page.createdAt), 'yyyy.MM.dd')}</p>
+                      <p>{dateFnsFormat(new Date(data.page.updatedAt), 'yyyy.MM.dd')}</p>
                     </div>
                     <div className="index-preview overflow-hidden">
                       <a href={`/${data.page._id}`} className="post-title text-decoration-none">
