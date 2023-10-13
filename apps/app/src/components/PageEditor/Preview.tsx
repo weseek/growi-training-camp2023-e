@@ -6,6 +6,7 @@ import type { RendererOptions } from '~/interfaces/renderer-options';
 
 import RevisionRenderer from '../Page/RevisionRenderer';
 
+import PreviewCMSHeader from './PreviewCMSHeader';
 
 type Props = {
   rendererOptions: RendererOptions,
@@ -23,7 +24,7 @@ const Preview = React.forwardRef((props: Props, ref: RefObject<HTMLDivElement>):
 
   return (
     <div
-      className={`page-editor-preview-body ${pagePath === '/Sidebar' ? 'preview-sidebar' : ''}`}
+      className={`page-editor-preview-body ${pagePath === '/Sidebar' ? 'preview-sidebar' : ''} ${pagePath?.startsWith('/_cms') ? 'preview-cms' : ''}`}
       ref={ref}
       onScroll={(event: SyntheticEvent<HTMLDivElement>) => {
         if (props.onScroll != null) {
@@ -31,6 +32,9 @@ const Preview = React.forwardRef((props: Props, ref: RefObject<HTMLDivElement>):
         }
       }}
     >
+      {pagePath?.startsWith('/_cms') && (
+        <PreviewCMSHeader />
+      ) }
       { markdown != null && (
         <RevisionRenderer rendererOptions={rendererOptions} markdown={markdown}></RevisionRenderer>
       ) }
