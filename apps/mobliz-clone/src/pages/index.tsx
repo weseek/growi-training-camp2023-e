@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import dateFnsFormat from 'date-fns/format';
 import parse from 'html-react-parser';
 import { NextPage } from 'next';
 
@@ -32,6 +33,10 @@ const TopPage: NextPage = () => {
               {data.map((pageData, index) => {
                 return (
                   <div className={`border bg-white p-5${index === 0 ? '' : ' mt-5'}`}>
+                    <div className="list-inline d-flex mb-4">
+                      <p className="me-4"> {dateFnsFormat(new Date(pageData.page.createdAt), 'yyyy.MM.dd')}</p>
+                      <div> {dateFnsFormat(new Date(pageData.page.updatedAt), 'yyyy.MM.dd')}</div>
+                    </div>
                     <div className="index-preview overflow-hidden">
                       <h2 className="pb-5 fw-bold">{pageData.title}</h2>
                       {parse(pageData.htmlString)}
