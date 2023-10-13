@@ -36,3 +36,17 @@ img {
 .index-preview {
   max-height: 500px;
 }
+
+.post-title {
+  color: #383838;
+  &:hover {
+    color: #f24e4f;
+  }
+}
+
+.new-post-list {
+  color: #383838;
+  &:hover {
+    color: #2581c4;
+  }
+}
