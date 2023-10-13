@@ -8,7 +8,7 @@ import Layout from '~/components/Layout';
 const App = ({ Component, pageProps }: AppProps): JSX.Element => (
   <>
     <Head>
-      <title />
+      <title>WESEEK Blog</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
     </Head>
     <Layout>

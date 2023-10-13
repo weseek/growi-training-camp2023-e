@@ -3,19 +3,9 @@ import React, { useState, useEffect } from 'react';
 import axios from '~/utils/axios';
 
 const SideMenu: React.FC = () => {
-  const [tag, setTag] = useState<any[]>();
   const [newPost, setNewPost] = useState<any[]>();
+  const [tag, setTag] = useState<any[]>();
   const [error, setError] = useState<string>();
-
-  useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/tags`)
-      .then((response) => {
-        setTag(response.data.data);
-      })
-      .catch((error) => {
-        setError(`データの取得に失敗しました。\n${JSON.stringify(error)}`);
-      });
-  }, []);
 
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/list.json`)
@@ -25,7 +15,15 @@ const SideMenu: React.FC = () => {
       .catch((error) => {
         setError(`データの取得に失敗しました。\n${JSON.stringify(error)}`);
       });
+    axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/tags`)
+      .then((response) => {
+        setTag(response.data.data);
+      })
+      .catch((error) => {
+        setError(`データの取得に失敗しました。\n${JSON.stringify(error)}`);
+      });
   }, []);
+
   return (
     <>
       {error == null ? (
@@ -35,20 +33,17 @@ const SideMenu: React.FC = () => {
               <span className="visually-hidden">Loading...</span>
             </div>
           ) : (
-            <>
+            <div className="pe-5">
               <div>
+                <i className="fa-solid fa-house"></i>
                 <div>最新記事</div>
-                <ul className="p-2">
+                <ul className="list-caret">
                   {newPost.map((newPostData, index) => {
                     return (
-                      <li className="container">
-                        <div className="row">
-                          <div className={`col-10 ${newPost.length - 1 === index ? '' : ' border-bottom'}`}>
-                            <a href={`/${newPostData.page._id}`} className="new-post-list text-decoration-none">
-                              <p className="my-2 ml-5">{`${newPostData.title}`}</p>
-                            </a>
-                          </div>
-                        </div>
+                      <li className={`container pb-2${newPost.length - 1 === index ? '' : ' border-bottom'}`}>
+                        <a href={`/${newPostData.page._id}`} className="new-post-list text-decoration-none">
+                          <span className="ms-2">{newPostData.title}</span>
+                        </a>
                       </li>
                     );
                   })}
@@ -56,27 +51,23 @@ const SideMenu: React.FC = () => {
               </div>
               <div>
                 <div>タグ</div>
-                <ul className="p-2">
+                <ul className="list-caret">
                   {tag.map((tagData, index) => {
                     return (
-                      <li className="container">
-                        <div className="row">
-                          <div className={`col-10 ${tag.length - 1 === index ? '' : ' border-bottom'}`}>
-                            <p className="my-2 ml-5">{`${tagData.name}`}</p>
-                          </div>
-                        </div>
+                      <li className={`container pb-2${tag.length - 1 === index ? '' : ' border-bottom'}`}>
+                        <a href="" className="new-post-list text-decoration-none">
+                          <span className="ms-2">{tagData.name}</span>
+                        </a>
                       </li>
                     );
                   })}
                 </ul>
               </div>
-            </>
+            </div>
           )}
         </>
       ) : (
-        <div>
-          <p>{error}</p>
-        </div>
+        { error }
       )}
     </>
   );
