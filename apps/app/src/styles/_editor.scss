@@ -244,17 +244,20 @@
    * CMS styles
    */
   .preview-cms {
-    padding-top: 200px !important;
+    padding: 0 !important;
     background-color: #f9f9f9;
-    background-image: url('../../public/images/weseek-blog-header.jpg');
-    background-repeat: no-repeat;
-    background-size: 100% 170px;
     .wiki{
-      width: 86%;
       padding: 32px;
+      margin: 32px !important;
       background-color: #fff;
       border: solid 1px #ccc;
     }
+  }
+
+  .preview-cms-header {
+    background-image: url('../../public/images/weseek-blog-header.jpg');
+    background-position: center;
+    background-size: cover;
   }
 
   // .builtin-editor .tab-pane#edit
