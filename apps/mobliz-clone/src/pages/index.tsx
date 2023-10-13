@@ -33,7 +33,9 @@ const TopPage: NextPage = () => {
                 return (
                   <div className={`border bg-white p-5${index === 0 ? '' : ' mt-5'}`}>
                     <div className="index-preview overflow-hidden">
-                      <h2 className="pb-5 fw-bold">{pageData.title}</h2>
+                      <a href={`/${pageData.page._id}`} className="post-title text-decoration-none">
+                        <h2 className="post-title mb-5 fw-bold">{pageData.title}</h2>
+                      </a>
                       {parse(pageData.htmlString)}
                     </div>
                     <a href={`/${pageData.page._id}`} className="btn btn-outline-primary text-decoration-none rounded-0 mt-4">

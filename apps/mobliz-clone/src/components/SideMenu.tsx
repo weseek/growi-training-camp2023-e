@@ -44,7 +44,9 @@ const SideMenu: React.FC = () => {
                       <li className="container">
                         <div className="row">
                           <div className={`col-10 ${newPost.length - 1 === index ? '' : ' border-bottom'}`}>
-                            <p className="my-2 ml-5">{`${newPostData.title}`}</p>
+                            <a href={`/${newPostData.page._id}`} className="new-post-list text-decoration-none">
+                              <p className="my-2 ml-5">{`${newPostData.title}`}</p>
+                            </a>
                           </div>
                         </div>
                       </li>
