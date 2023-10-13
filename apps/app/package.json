@@ -211,6 +211,8 @@
     "handsontable": "v7.0.0 or above is no loger MIT lisence."
   },
   "devDependencies": {
+    "@ant-design/charts": "^1.4.2",
+    "@ant-design/plots": "^1.2.5",
     "@growi/presentation": "link:../../packages/presentation",
     "@growi/ui": "link:../../packages/ui",
     "@handsontable/react": "=2.1.0",
