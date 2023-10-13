@@ -38,7 +38,9 @@ const TopPage: NextPage = () => {
                       <div> {dateFnsFormat(new Date(data.page.updatedAt), 'yyyy.MM.dd')}</div>
                     </div>
                     <div className="index-preview overflow-hidden">
-                      <h2 className="pb-5 fw-bold">{data.title}</h2>
+                      <a href={`/${data.page._id}`} className="post-title text-decoration-none">
+                        <h2 className="post-title mb-5 fw-bold">{data.title}</h2>
+                      </a>
                       {parse(data.htmlString)}
                     </div>
                     <a href={`/${data.page._id}`} className="btn btn-outline-primary text-decoration-none rounded-0 mt-4">
