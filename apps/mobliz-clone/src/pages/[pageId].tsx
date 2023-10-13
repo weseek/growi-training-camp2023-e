@@ -14,13 +14,13 @@ type Props = {
 const DetailPage: NextPage<Props> = (props: Props) => {
   const router = useRouter();
   const pageId = router.query.pageId ?? props.pageId;
-  const [resData, setRresData] = useState<any>();
+  const [resData, setResData] = useState<any>();
   const [error, setError] = useState<string>();
 
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/${pageId}.json`)
       .then((response) => {
-        setRresData(response.data);
+        setResData(response.data);
       })
       .catch((error) => {
         setError(`データの取得に失敗しました。\n${JSON.stringify(error)}`);
