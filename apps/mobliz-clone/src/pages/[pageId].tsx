@@ -14,13 +14,13 @@ type Props = {
 const DetailPage: NextPage<Props> = (props: Props) => {
   const router = useRouter();
   const pageId = router.query.pageId ?? props.pageId;
-  const [pageData, setPageData] = useState<any>();
+  const [resData, setRresData] = useState<any>();
   const [error, setError] = useState<string>();
 
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_APP_SITE_URL}/_cms/${pageId}.json`)
       .then((response) => {
-        setPageData(response.data);
+        setRresData(response.data);
       })
       .catch((error) => {
         setError(`データの取得に失敗しました。\n${JSON.stringify(error)}`);
@@ -31,21 +31,21 @@ const DetailPage: NextPage<Props> = (props: Props) => {
     <div className="border bg-white p-5">
       {error == null ? (
         <>
-          {pageData == null ? (
+          {resData == null ? (
             <div className="spinner-border" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
           ) : (
             <>
               <div className="list-inline d-flex mb-4">
-                <p className="me-4"> {dateFnsFormat(new Date(pageData.page.createdAt), 'yyyy.MM.dd')}</p>
-                <div> {dateFnsFormat(new Date(pageData.page.updatedAt), 'yyyy.MM.dd')}</div>
+                <p className="me-4"> {dateFnsFormat(new Date(resData.page.createdAt), 'yyyy.MM.dd')}</p>
+                <div> {dateFnsFormat(new Date(resData.page.updatedAt), 'yyyy.MM.dd')}</div>
               </div>
-              <h2 className="pb-5 fw-bold">{pageData.title}</h2>
-              {parse(pageData.htmlString)}
+              <h2 className="pb-5 fw-bold">{resData.title}</h2>
+              {parse(resData.htmlString)}
               <hr />
-              <img src={pageData.page.creator.imageUrlCached} width="100" height="100" alt="" />
-              <p><strong>{pageData.page.creator.name}</strong></p>
+              <img src={resData.page.creator.imageUrlCached} width="100" height="100" alt="" />
+              <p><strong>{resData.page.creator.name}</strong></p>
             </>
           )}
         </>
